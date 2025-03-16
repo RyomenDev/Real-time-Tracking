@@ -37,9 +37,10 @@ io.on("connection", (socket) => {
   });
 });
 
-// API route to get the current active users
+// API route to get current active users
 app.get("/api/current-users", (req, res) => {
-  res.json({ activeUsers: activeUsers.size });
+  const users = Array.from(activeUsers.values()); // Convert Map values to array
+  res.json({ activeUsers: users, count: users.length });
 });
 
 server.listen(5000, () => console.log("Server running on port 5000"));
