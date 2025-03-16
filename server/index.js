@@ -7,23 +7,33 @@ const app = express();
 app.use(cors());
 
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+  //   pingInterval: 5000, // Prevents timeouts by sending a ping every 5 seconds
+  //   pingTimeout: 25000, // Extends the timeout period before disconnecting
+});
 
-let usersOnPage = 0;
+let activeUsers = new Set();
 
 io.on("connection", (socket) => {
-  usersOnPage++; // Increment when a user connects
-  io.emit("updateUserCount", usersOnPage); // Notify all clients
+  //   console.log(`User connected: ${socket.id}`);
+  activeUsers.add(socket.id);
+
+  io.emit("updateUserCount", activeUsers.size);
 
   socket.on("disconnect", () => {
-    usersOnPage--; // Decrement when a user disconnects
-    io.emit("updateUserCount", usersOnPage);
+    // console.log(`User disconnected: ${socket.id}`);
+    activeUsers.delete(socket.id);
+    io.emit("updateUserCount", activeUsers.size);
   });
 });
 
-// Route to get current users
+// API route to get the current active users
 app.get("/api/current-users", (req, res) => {
-  res.json({ activeUsers: usersOnPage });
+  res.json({ activeUsers: activeUsers.size });
 });
 
 server.listen(5000, () => console.log("Server running on port 5000"));
