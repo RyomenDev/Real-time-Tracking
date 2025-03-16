@@ -21,4 +21,9 @@ io.on("connection", (socket) => {
   });
 });
 
+// Route to get current users
+app.get("/api/current-users", (req, res) => {
+  res.json({ activeUsers: usersOnPage });
+});
+
 server.listen(5000, () => console.log("Server running on port 5000"));
