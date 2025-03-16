@@ -16,11 +16,16 @@ const io = new Server(server, {
   //   pingTimeout: 25000, // Extends the timeout period before disconnecting
 });
 
-let activeUsers = new Set();
+// let activeUsers = new Set();
+let activeUsers = new Map(); // Use a Map instead of a Set to store IPs with socket IDs
 
 io.on("connection", (socket) => {
   //   console.log(`User connected: ${socket.id}`);
-  activeUsers.add(socket.id);
+  const userIp = socket.handshake.address; // Get user IP from the socket handshake
+  console.log(`User connected: ${socket.id} from IP: ${userIp}`);
+
+  //   activeUsers.add(socket.id);
+  activeUsers.set(socket.id, { ip: userIp });
 
   io.emit("updateUserCount", activeUsers.size);
 
