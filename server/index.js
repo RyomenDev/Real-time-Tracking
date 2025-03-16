@@ -5,6 +5,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors());
+// app.set("trust proxy", true); // Trust reverse proxies for real IP
 
 const server = http.createServer(app);
 const io = new Server(server, {
