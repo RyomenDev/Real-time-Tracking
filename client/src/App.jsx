@@ -1,9 +1,11 @@
-import PageTracker from "./components/PageTracker.jsx";
+import PageTrackerGlobal from "./components/PageTrackerGlobal.jsx";
+import PageTrackerSingle from "./components/PageTrackerSingle.jsx";
 
 function App() {
   return (
     <>
-      <PageTracker />
+      <PageTrackerGlobal />
+      <PageTrackerSingle />
     </>
   );
 }
